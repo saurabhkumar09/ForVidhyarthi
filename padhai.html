@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnHelp</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#1D9E75;--green-dark:#0F6E56;--green-light:#E1F5EE;
+  --amber:#E8960A;--amber-light:#FEF3DC;
+  --orange:#E05C2A;--orange-light:#FEF0EA;
+  --blue:#2563EB;--blue-light:#EFF6FF;
+  --purple:#7C3AED;--purple-light:#F5F3FF;
+  --red:#DC2626;--red-light:#FEF2F2;
+  --teal:#0891B2;--teal-light:#ECFEFF;
+  --bg:#FAFAF8;--card:#FFFFFF;--text:#1C1917;--text2:#57534E;--text3:#A8A29E;
+  --border:#E7E5E4;--radius:14px;--radius-sm:8px;
+  --shadow:0 2px 12px rgba(0,0,0,0.07);--shadow-lg:0 8px 32px rgba(0,0,0,0.10);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans',sans-serif;background:var(--bg);color:var(--text);font-size:17px;line-height:1.6;}
+h1,h2,h3,h4{font-family:'Baloo 2',cursive;}
+nav{background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow);}
+.nav-inner{max-width:980px;margin:0 auto;padding:0 1rem;display:flex;align-items:center;justify-content:space-between;height:56px;}
+.nav-logo{font-family:'Baloo 2',cursive;font-weight:800;font-size:21px;color:var(--green);cursor:pointer;}
+.nav-logo span{color:var(--amber);}
+.nav-links{display:flex;gap:2px;flex-wrap:wrap;}
+.nav-link{padding:5px 10px;border-radius:var(--radius-sm);font-size:14.5px;font-weight:500;color:var(--text2);cursor:pointer;border:none;background:none;transition:all 0.15s;white-space:nowrap;}
+.nav-link:hover,.nav-link.active{background:var(--green-light);color:var(--green-dark);}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px;flex-direction:column;gap:5px;}
+.hamburger span{width:22px;height:2px;background:var(--text);display:block;border-radius:2px;}
+.mob-nav{display:none;flex-direction:column;background:var(--card);border-bottom:1px solid var(--border);padding:0.5rem 1rem 1rem;}
+.mob-nav .nav-link{padding:10px 12px;font-size:16px;text-align:left;}
+.page{display:none;max-width:980px;margin:0 auto;padding:1.5rem 1rem 4rem;}
+.page.active{display:block;}
+.hero{text-align:center;padding:2.5rem 1rem 2rem;}
+.badge{display:inline-block;background:var(--green-light);color:var(--green-dark);font-size:14px;font-weight:600;padding:4px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:0.04em;}
+.hero h1{font-size:clamp(30px,5vw,50px);font-weight:800;line-height:1.2;margin-bottom:1rem;}
+.hero h1 span{color:var(--green);}
+.hero p{font-size:17px;color:var(--text2);max-width:500px;margin:0 auto 2rem;}
+.stats{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-bottom:2rem;}
+.stat-num{font-family:'Baloo 2',cursive;font-size:30px;font-weight:800;color:var(--green);}
+.stat-label{font-size:14px;color:var(--text3);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 22px;border-radius:var(--radius-sm);font-size:16px;font-weight:700;font-family:'Baloo 2',cursive;cursor:pointer;border:none;transition:all 0.15s;}
+.btn-g{background:var(--green);color:#fff;width:100%;}
+.btn-g:hover{background:var(--green-dark);}
+.btn-o{background:transparent;color:var(--green);border:2px solid var(--green);padding:9px 20px;}
+.btn-o:hover{background:var(--green-light);}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.8rem;margin:2rem 0;}
+.feat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem;text-align:center;cursor:pointer;transition:box-shadow 0.15s;}
+.feat:hover{box-shadow:var(--shadow-lg);}
+.feat-icon{font-size:30px;margin-bottom:0.5rem;}
+.feat-title{font-family:'Baloo 2',cursive;font-size:16px;font-weight:700;margin-bottom:0.2rem;}
+.feat-desc{font-size:14px;color:var(--text2);}
+.sec-title{font-size:22px;font-weight:800;margin-bottom:0.2rem;}
+.sec-sub{font-size:15px;color:var(--text2);margin-bottom:1.2rem;}
+/* FORM */
+.finder-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:1.5rem;margin-bottom:1.5rem;}
+.flabel{font-size:15px;font-weight:500;color:var(--text2);display:block;margin-bottom:5px;}
+.finput{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:16px;font-family:'Noto Sans',sans-serif;background:var(--bg);color:var(--text);transition:border 0.15s;margin-bottom:1rem;}
+.finput:focus{outline:none;border-color:var(--green);}
+/* FLOWCHART */
+.fc-wrap{overflow-x:auto;padding-bottom:0.5rem;}
+.fc-root{display:flex;justify-content:center;margin-bottom:0;}
+.root-node{background:var(--green);color:#fff;font-family:'Baloo 2',cursive;font-size:17px;font-weight:700;padding:11px 28px;border-radius:var(--radius);display:inline-block;}
+.fc-line{width:2px;height:26px;background:var(--border);margin:0 auto;}
+.fc-hline{height:2px;background:var(--border);margin:0 4%;}
+.fc-row{display:flex;gap:0;min-width:560px;}
+.fc-col{flex:1;display:flex;flex-direction:column;align-items:center;padding:0 3px;}
+.fc-tick{width:2px;height:20px;background:var(--border);}
+.sbox{width:100%;border-radius:var(--radius-sm);padding:9px 5px;text-align:center;cursor:pointer;font-family:'Baloo 2',cursive;font-weight:700;font-size:14px;border:2px solid transparent;transition:all 0.18s;user-select:none;line-height:1.3;}
+.sbox:hover,.sbox.open{transform:translateY(-2px);box-shadow:var(--shadow);}
+.sb1{background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE;}.sb1.open{background:#DBEAFE;border-color:#3B82F6;}
+.sb2{background:var(--green-light);color:var(--green-dark);border-color:#6EE7B7;}.sb2.open{background:#A7F3D0;border-color:var(--green);}
+.sb3{background:var(--amber-light);color:#92400E;border-color:#FCD34D;}.sb3.open{background:#FDE68A;border-color:var(--amber);}
+.sb4{background:var(--purple-light);color:#5B21B6;border-color:#C4B5FD;}.sb4.open{background:#DDD6FE;border-color:var(--purple);}
+.sb5{background:var(--orange-light);color:#9A3412;border-color:#FDBA74;}.sb5.open{background:#FED7AA;border-color:var(--orange);}
+.stags{margin-top:6px;display:flex;flex-direction:column;gap:3px;width:100%;}
+.stag{font-size:12px;padding:2px 0;text-align:center;border-radius:20px;color:var(--text2);background:var(--bg);border:1px solid var(--border);}
+/* DETAIL */
+.det-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-top:1rem;animation:fadeIn 0.2s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+.det-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.7rem;}
+.det-title{font-family:'Baloo 2',cursive;font-size:19px;font-weight:700;}
+.x-btn{background:var(--bg);border:1px solid var(--border);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;flex-shrink:0;margin-left:8px;}
+.det-desc{font-size:15px;color:var(--text2);margin-bottom:1rem;line-height:1.7;}
+.c-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:7px;}
+.c-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 11px;}
+.c-name{font-family:'Baloo 2',cursive;font-weight:700;font-size:14px;margin-bottom:2px;}
+.c-det{font-size:13px;color:var(--text3);}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;}
+.tag{font-size:12px;padding:2px 8px;border-radius:20px;font-weight:600;}
+.tg{background:var(--green-light);color:var(--green-dark);}
+.tb{background:var(--blue-light);color:var(--blue);}
+.ta{background:var(--amber-light);color:#92400E;}
+.tr{background:var(--red-light);color:var(--red);}
+.tp{background:var(--purple-light);color:var(--purple);}
+.tt{background:var(--teal-light);color:var(--teal);}
+/* TABS */
+.tab-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.2rem;border-bottom:1.5px solid var(--border);padding-bottom:0.8rem;}
+.tab{padding:6px 14px;border-radius:20px;font-size:14.5px;font-weight:600;border:1.5px solid var(--border);background:var(--card);color:var(--text2);cursor:pointer;transition:all 0.15s;}
+.tab:hover,.tab.active{border-color:var(--green);background:var(--green-light);color:var(--green-dark);}
+/* BIG CARDS */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:0.9rem;}
+.big-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem;transition:all 0.2s ease;}
+.big-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px);}
+.bc-head{display:flex;gap:10px;align-items:flex-start;margin-bottom:0.7rem;}
+.bc-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.bc-title{font-family:'Baloo 2',cursive;font-size:16px;font-weight:700;line-height:1.2;}
+.bc-sub{font-size:13px;color:var(--text3);margin-top:1px;}
+.bc-desc{font-size:14.5px;color:var(--text2);margin-bottom:0.7rem;line-height:1.6;}
+.pills{display:flex;gap:5px;flex-wrap:wrap;}
+.pill{font-size:13px;padding:3px 9px;border-radius:20px;font-weight:500;}
+.pg{background:var(--green-light);color:var(--green-dark);}
+.pa{background:var(--amber-light);color:#92400E;}
+.pb{background:var(--blue-light);color:var(--blue);}
+.pr{background:var(--red-light);color:var(--red);}
+.pt{background:var(--teal-light);color:var(--teal);}
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:0.8rem;font-size:14px;padding:6px 10px;border-radius:var(--radius-sm);background:#25D366;color:#fff;border:none;cursor:pointer;font-weight:600;width:100%;}
+.wa-btn:hover{background:#128C7E;}
+/* EXAM PREP */
+.exam-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-bottom:1rem;transition:all 0.2s ease;}
+.exam-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px);}
+.exam-head{display:flex;align-items:center;gap:12px;margin-bottom:0.7rem;cursor:pointer;}
+.exam-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.exam-title{font-family:'Baloo 2',cursive;font-size:18px;font-weight:700;}
+.exam-badge{font-size:13px;padding:2px 10px;border-radius:20px;font-weight:600;margin-top:2px;display:inline-block;}
+.exam-body{margin-top:0.8rem;border-top:1px solid var(--border);padding-top:0.8rem;}
+.exam-section{margin-bottom:0.8rem;}
+.exam-sec-title{font-size:14px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
+.exam-list{list-style:none;display:flex;flex-direction:column;gap:3px;}
+.exam-list li{font-size:15px;color:var(--text2);padding-left:14px;position:relative;}
+.exam-list li::before{content:'→';position:absolute;left:0;color:var(--green);font-size:13px;}
+.resource-row{display:flex;flex-wrap:wrap;gap:6px;}
+.res-tag{font-size:13px;padding:3px 10px;border-radius:20px;background:var(--blue-light);color:var(--blue);font-weight:500;}
+/* JOBS */
+.jobs-section{margin-bottom:2rem;}
+.jobs-header{background:var(--green);color:#fff;border-radius:var(--radius) var(--radius) 0 0;padding:10px 16px;font-family:'Baloo 2',cursive;font-size:18px;font-weight:700;}
+.jobs-body{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:1rem;}
+.job-row{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border);gap:10px;}
+.job-row:last-child{border-bottom:none;}
+.job-name{font-family:'Baloo 2',cursive;font-size:15px;font-weight:700;margin-bottom:2px;}
+.job-org{font-size:13px;color:var(--text3);}
+.job-salary{font-size:14px;font-weight:600;color:var(--green);white-space:nowrap;}
+/* SCHEMES */
+.scheme-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-bottom:0.9rem;transition:all 0.2s ease;}
+.scheme-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px);}
+.sch-head{display:flex;align-items:center;gap:11px;margin-bottom:0.6rem;}
+.sch-icon{width:42px;height:42px;border-radius:10px;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.sch-name{font-family:'Baloo 2',cursive;font-size:18px;font-weight:700;}
+.sch-by{font-size:13px;color:var(--text3);}
+.sch-desc{font-size:15px;color:var(--text2);margin-bottom:0.7rem;line-height:1.7;}
+/* STORIES */
+.story-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0.9rem;}
+.story-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;position:relative;overflow:hidden;transition:all 0.2s ease;}
+.story-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px);}
+.story-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--green);}
+.story-av{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;margin-bottom:0.7rem;}
+.story-name{font-family:'Baloo 2',cursive;font-size:18px;font-weight:700;}
+.story-from{font-size:13px;color:var(--text3);margin-bottom:0.5rem;}
+.story-path{font-size:13px;color:var(--text2);font-style:italic;margin-bottom:0.5rem;}
+.story-text{font-size:14.5px;color:var(--text2);line-height:1.7;}
+.story-badge{display:inline-block;margin-top:0.6rem;font-size:13px;padding:3px 10px;border-radius:20px;font-weight:600;background:var(--green-light);color:var(--green-dark);}
+footer{background:var(--green-dark);color:#fff;text-align:center;padding:2rem 1rem;}
+footer h3{font-family:'Baloo 2',cursive;font-size:21px;margin-bottom:0.4rem;}
+footer p{font-size:15px;opacity:0.75;}
+.greet{font-family:'Baloo 2',cursive;font-size:23px;font-weight:800;color:var(--green);margin-bottom:0.3rem;}
+@media(max-width:660px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .mob-nav.open{display:flex;}
+  .fc-row{min-width:480px;}
+  .sbox{font-size:13px;padding:7px 3px;}
+}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:400;}
+.modal{background:var(--card);width:min(760px,95%);border-radius:12px;padding:18px;border:1px solid var(--border);box-shadow:var(--shadow-lg);max-height:85vh;overflow:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
+.modal-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:800}
+.modal-sub{font-size:14px;color:var(--text3)}
+.modal-body{font-size:15px;color:var(--text2);line-height:1.6;margin-top:8px}
+.modal-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.modal-pill{font-size:13px;padding:6px 10px;border-radius:20px;background:var(--bg);border:1px solid var(--border);font-weight:700}
+.modal-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.modal .wa-btn{width:auto;padding:8px 12px}
+.modal-close{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="go('home')">Mera <span>Career</span> Finder</div>
+    <div class="nav-links">
+      <button class="nav-link active" onclick="go('home')">Home</button>
+      <button class="nav-link" onclick="go('finder')">Career Finder</button>
+      <button class="nav-link" onclick="go('courses')">Courses</button>
+      <button class="nav-link" onclick="go('examprep')">Exam Prep</button>
+      <button class="nav-link" onclick="go('jobs')">Jobs</button>
+      <button class="nav-link" onclick="go('schemes')">Schemes</button>
+      <button class="nav-link" onclick="go('opportunities')">Opportunities</button>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+  <div class="mob-nav" id="mobNav">
+    <button class="nav-link" onclick="go('home');toggleMenu()">🏠 Home</button>
+    <button class="nav-link" onclick="go('finder');toggleMenu()">🔍 Career Finder</button>
+    <button class="nav-link" onclick="go('courses');toggleMenu()">📚 Courses</button>
+    <button class="nav-link" onclick="go('examprep');toggleMenu()">📝 Exam Prep</button>
+    <button class="nav-link" onclick="go('jobs');toggleMenu()">💼 Jobs</button>
+    <button class="nav-link" onclick="go('schemes');toggleMenu()">🎓 Schemes</button>
+    <button class="nav-link" onclick="go('opportunities');toggleMenu()">🌟 Opportunities</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="badge">🌱 Rural Youth Career Guide — Bilkul Free</div>
+    <h1>Apna Rasta<br><span>Khud Chuno</span></h1>
+    <p>10th ya 12th ke baad kya karna hai? Courses, Exams, Jobs — sab kuch ek jagah. Aasaan bhasha mein.</p>
+    <div class="stats">
+      <div><div class="stat-num">80+</div><div class="stat-label">Career Options</div></div>
+      <div><div class="stat-num">15+</div><div class="stat-label">Exam Guides</div></div>
+      <div><div class="stat-num">60+</div><div class="stat-label">Job Options</div></div>
+      <div><div class="stat-num">10+</div><div class="stat-label">Govt Schemes</div></div>
+    </div>
+    <button class="btn btn-g" style="max-width:200px;" onclick="go('finder')">Mera Future Dekho →</button>
+  </div>
+  <div class="features">
+    <div class="feat" onclick="go('finder')"><div class="feat-icon">🗺️</div><div class="feat-title">Career Finder</div><div class="feat-desc">Apni class bharo, future dekho</div></div>
+    <div class="feat" onclick="go('courses')"><div class="feat-icon">📚</div><div class="feat-title">Saare Courses</div><div class="feat-desc">BA, B.Sc, B.Tech, MBBS — sab</div></div>
+    <div class="feat" onclick="go('examprep')"><div class="feat-icon">📝</div><div class="feat-title">Exam Preparation</div><div class="feat-desc">JEE, NEET, UPSC — kaise taiyari</div></div>
+    <div class="feat" onclick="go('jobs')"><div class="feat-icon">💼</div><div class="feat-title">Job Options</div><div class="feat-desc">10th/12th/Graduation ke baad</div></div>
+    <div class="feat" onclick="go('schemes')"><div class="feat-icon">💰</div><div class="feat-title">Sarkari Schemes</div><div class="feat-desc">Scholarship aur free training</div></div>
+    <div class="feat" onclick="go('stories')"><div class="feat-icon">⭐</div><div class="feat-title">Success Stories</div><div class="feat-desc">Gaon ke logo ki inspiring kahaniya</div></div>
+  </div>
+</div>
+
+<!-- CAREER FINDER -->
+<div class="page" id="page-finder">
+  <div class="sec-title">Career Finder 🔍</div>
+  <div class="sec-sub">Apna naam aur class select karo — saare options dekho</div>
+  <div class="finder-box">
+    <div style="font-family:'Baloo 2',cursive;font-size:20px;font-weight:700;margin-bottom:0.3rem;">Apna Future Dhundo</div>
+    <p style="font-size:15px;color:var(--text2);margin-bottom:1.2rem;">Neeche details bharo aur "Future Dekho" press karo</p>
+    <label class="flabel">Tumhara Naam</label>
+    <input class="finput" id="fn" type="text" placeholder="Naam likho...">
+    <label class="flabel">Abhi kaunsi class mein ho?</label>
+    <select class="finput" id="fc">
+      <option value="">-- Select karo --</option>
+      <option value="10">10th Class</option>
+      <option value="12pcm">12th Science — PCM (Physics, Chemistry, Maths)</option>
+      <option value="12pcb">12th Science — PCB (Physics, Chemistry, Biology)</option>
+      <option value="12com">12th Commerce</option>
+      <option value="12arts">12th Arts / Humanities</option>
+      <option value="grad">Graduation Complete</option>
+    </select>
+    <button class="btn btn-g" onclick="runFinder()">Mera Future Dekho 🚀</button>
+  </div>
+  <div id="fresult" style="display:none">
+    <div class="greet" id="fgreet"></div>
+    <div style="font-size:15px;color:var(--text2);margin-bottom:1.2rem;" id="fsub"></div>
+    <div id="fc10" style="display:none">
+      <div class="sec-title" style="font-size:19px;">10th ke baad ka Roadmap</div>
+      <div class="sec-sub">Kisi bhi box par click karo — detail khulegi</div>
+      <div class="fc-wrap">
+        <div class="fc-root"><div class="root-node">✅ 10th Complete</div></div>
+        <div class="fc-line"></div>
+        <div class="fc-hline"></div>
+        <div class="fc-row">
+          <div class="fc-col"><div class="fc-tick"></div><div class="sbox sb1" onclick="tdet('d1')">Science PCM</div><div class="stags"><div class="stag">Engineering</div><div class="stag">IT/CS</div><div class="stag">NDA</div></div></div>
+          <div class="fc-col"><div class="fc-tick"></div><div class="sbox sb2" onclick="tdet('d2')">Science PCB</div><div class="stags"><div class="stag">MBBS</div><div class="stag">Nursing</div><div class="stag">Pharmacy</div></div></div>
+          <div class="fc-col"><div class="fc-tick"></div><div class="sbox sb3" onclick="tdet('d3')">Commerce</div><div class="stags"><div class="stag">CA</div><div class="stag">BBA</div><div class="stag">Banking</div></div></div>
+          <div class="fc-col"><div class="fc-tick"></div><div class="sbox sb4" onclick="tdet('d4')">Arts/Humanities</div><div class="stags"><div class="stag">Law/LLB</div><div class="stag">UPSC</div><div class="stag">Journalism</div></div></div>
+          <div class="fc-col"><div class="fc-tick"></div><div class="sbox sb5" onclick="tdet('d5')">ITI/Diploma</div><div class="stags"><div class="stag">Electrician</div><div class="stag">Computer</div><div class="stag">Polytechnic</div></div></div>
+        </div>
+      </div>
+      <div id="d1" class="det-panel" style="display:none"></div>
+      <div id="d2" class="det-panel" style="display:none"></div>
+      <div id="d3" class="det-panel" style="display:none"></div>
+      <div id="d4" class="det-panel" style="display:none"></div>
+      <div id="d5" class="det-panel" style="display:none"></div>
+      <div style="margin-top:1.5rem;padding:1rem;background:var(--amber-light);border-radius:var(--radius);border:1px solid #FCD34D;">
+        <div style="font-family:'Baloo 2',cursive;font-size:17px;font-weight:700;color:#92400E;margin-bottom:0.3rem;">💡 10th ke baad Direct Jobs bhi hain!</div>
+        <div style="font-size:15px;color:#92400E;">Railway Group D, Army Soldier, Police Constable, Anganwadi — inke liye <button onclick="go('jobs')" style="background:none;border:none;color:var(--blue);cursor:pointer;font-weight:600;font-size:15px;">Jobs Page dekho →</button></div>
+      </div>
+    </div>
+    <div id="fc12" style="display:none">
+      <div class="sec-title" style="font-size:19px;" id="fc12t"></div>
+      <div class="cards-grid" id="fc12c"></div>
+      <div style="margin-top:1.2rem;padding:1rem;background:var(--blue-light);border-radius:var(--radius);border:1px solid #BFDBFE;">
+        <div style="font-family:'Baloo 2',cursive;font-size:17px;font-weight:700;color:var(--blue);margin-bottom:0.3rem;">📝 Exam ki taiyari kaise karo?</div>
+        <div style="font-size:15px;color:var(--blue);">JEE, NEET, CLAT, UPSC — detailed guide ke liye <button onclick="go('examprep')" style="background:none;border:none;color:var(--blue);cursor:pointer;font-weight:700;font-size:15px;text-decoration:underline;">Exam Prep page dekho →</button></div>
+      </div>
+    </div>
+    <div id="fcgrad" style="display:none">
+      <div class="sec-title" style="font-size:19px;">Graduation ke baad ke Options</div>
+      <div class="cards-grid" id="fcgradc"></div>
+    </div>
+  </div>
+</div>
+
+<!-- COURSES -->
+<div class="page" id="page-courses">
+  <div class="sec-title">Saare Courses 📚</div>
+  <div class="sec-sub">Stream ya level select karo aur apne courses dekho</div>
+  <div class="tab-row">
+    <button class="tab active" onclick="filterC('all',this)">Sab Courses</button>
+    <button class="tab" onclick="filterC('10',this)">After 10th</button>
+    <button class="tab" onclick="filterC('pcm',this)">Science PCM</button>
+    <button class="tab" onclick="filterC('pcb',this)">Science PCB</button>
+    <button class="tab" onclick="filterC('com',this)">Commerce</button>
+    <button class="tab" onclick="filterC('arts',this)">Arts</button>
+    <button class="tab" onclick="filterC('gen',this)">General/Any Stream</button>
+  </div>
+  <div class="cards-grid" id="coursesGrid"></div>
+</div>
+
+<!-- EXAM PREP -->
+<div class="page" id="page-examprep">
+  <div class="sec-title">Exam Preparation Guide 📝</div>
+  <div class="sec-sub">Har exam ki puri jankari — syllabus, books, free resources aur tips</div>
+  <div class="tab-row">
+    <button class="tab active" onclick="filterE('all',this)">Sab Exams</button>
+    <button class="tab" onclick="filterE('engg',this)">Engineering</button>
+    <button class="tab" onclick="filterE('med',this)">Medical</button>
+    <button class="tab" onclick="filterE('govt',this)">Govt Jobs</button>
+    <button class="tab" onclick="filterE('law',this)">Law</button>
+    <button class="tab" onclick="filterE('bank',this)">Banking</button>
+  </div>
+  <div id="examGrid"></div>
+</div>
+
+<!-- JOBS -->
+<div class="page" id="page-jobs">
+  <div class="sec-title">Job Options 💼</div>
+  <div class="sec-sub">10th, 12th aur Graduation ke baad — Government aur Private dono</div>
+  <div class="tab-row">
+    <button class="tab active" onclick="showJobs('10',this)">After 10th</button>
+    <button class="tab" onclick="showJobs('12',this)">After 12th</button>
+    <button class="tab" onclick="showJobs('grad',this)">After Graduation</button>
+  </div>
+  <div id="jobsContent"></div>
+</div>
+
+<!-- SCHEMES -->
+<div class="page" id="page-schemes">
+  <div class="sec-title">Sarkari Schemes & Scholarships 💰</div>
+  <div class="sec-sub">Rural aur underprivileged students ke liye free paisa aur suvidhaen</div>
+  <div id="schemesDiv"></div>
+</div>
+
+<!-- OPPORTUNITIES -->
+<div class="page" id="page-opportunities">
+  <div class="sec-title">Career Opportunities 🌟</div>
+  <div class="sec-sub">Practical, local and remote opportunities — skill training, self-employment, small business, and part-time jobs.</div>
+  <div class="cards-grid" id="opportunitiesGrid"></div>
+  <div style="margin-top:2rem;">
+    <div class="sec-title">Uttarakhand Free Training Centers 🏔️</div>
+    <div class="sec-sub">Uttarakhand mein yeh centers free ya low-cost skill training dete hain. Inmein se kaafi jagah PMKVY aur state sponsored courses chalte hain.</div>
+    <div class="cards-grid" id="uktCentersGrid"></div>
+  </div>
+</div>
+
+<!-- COURSE DETAILS MODAL -->
+<div class="modal-overlay" id="courseModalOverlay" onclick="if(event.target&&event.target.id==='courseModalOverlay')closeCourseModal()">
+  <div class="modal" id="courseModal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="modalTitle">Course Title</div>
+        <div class="modal-sub" id="modalSub">Short details</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="modal-close" onclick="closeCourseModal()">Close</button>
+        <button class="wa-btn" id="modalWaBtn" onclick="modalShare()">📲 Share</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modalBody">Full description</div>
+    <div class="modal-meta" id="modalMeta"></div>
+    <div class="modal-tags" id="modalTags"></div>
+  </div>
+</div>
+
+<footer>
+  <h3>Mera Career Finder 🌱</h3>
+  <p>Rural India ke har student ke liye — bilkul free, bilkul aasaan</p>
+  <p style="margin-top:0.4rem;font-size:14px;opacity:0.5;">Designed with ❤️ for Rural Youth of India</p>
+</footer>
+
+<script>
+// ===== DATA =====
+
+const streamDet = {
+  d1:{title:'Science — PCM',desc:'Engineering, computers, defense aur architecture ke liye. JEE exam se B.Tech mein admission. 10th ke baad NDA bhi apply kar sakte ho.',
+  courses:[
+    {n:'B.Tech/B.E.',d:'4 saal | JEE Mains/Advanced',tags:[['High Salary','tb'],['JEE Exam','tb']]},
+    {n:'BCA',d:'3 saal | No JEE needed',tags:[['IT Sector','tg'],['Easy Entry','tg']]},
+    {n:'B.Sc (Math/Physics/CS)',d:'3 saal | Research/Teaching',tags:[['Research','ta'],['Govt Jobs','tg']]},
+    {n:'NDA — Defense',d:'UPSC NDA Exam',tags:[['Army/Navy','tg'],['Officer','ta']]},
+    {n:'Architecture (B.Arch)',d:'5 saal | NATA Exam',tags:[['Creative','ta'],['Design','tb']]},
+    {n:'Merchant Navy',d:'DNS/B.Sc Nautical',tags:[['Very High Salary','ta'],['International','tb']]}
+  ]},
+  d2:{title:'Science — PCB',desc:'Medical field mein jaana chahte ho toh PCB lo. NEET exam se MBBS, BDS, Nursing. Rural areas mein doctors ki bahut zarurat hai.',
+  courses:[
+    {n:'MBBS — Doctor',d:'5.5 saal | NEET',tags:[['Most Respected','tg'],['Govt Hospital','tb']]},
+    {n:'BDS — Dentist',d:'5 saal | NEET',tags:[['Dental Doctor','tg'],['Easy than MBBS','ta']]},
+    {n:'B.Sc Nursing',d:'4 saal | High Demand',tags:[['Rural Health','tg'],['Govt Jobs','tb']]},
+    {n:'B.Pharm',d:'4 saal | No NEET',tags:[['Pharma','ta'],['Medical Shop','tg']]},
+    {n:'BAMS/BHMS',d:'5.5 saal | NEET',tags:[['Ayurveda','tg'],['Alt. Medicine','ta']]},
+    {n:'Veterinary (B.V.Sc)',d:'5.5 saal',tags:[['Animal Doctor','tg'],['Rural Scope','ta']]}
+  ]},
+  d3:{title:'Commerce',desc:'Finance, banking aur business mein career banana chahte ho toh Commerce best hai. CA India ka top professional course hai.',
+  courses:[
+    {n:'CA (Chartered Accountant)',d:'4-5 saal | ICAI',tags:[['Top Salary','ta'],['Prestigious','tg']]},
+    {n:'B.Com',d:'3 saal | Flexible',tags:[['Govt Jobs','tg'],['Banking','tb']]},
+    {n:'BBA + MBA',d:'3+2 saal',tags:[['Management','tb'],['High Salary','ta']]},
+    {n:'B.Com (Hons)',d:'3 saal | DU/Top colleges',tags:[['Finance','tg'],['Accounting','tb']]},
+    {n:'Economics (Hons)',d:'3 saal',tags:[['Civil Services','ta'],['Research','tg']]},
+    {n:'Banking Exams',d:'After Graduation',tags:[['Sarkari Job','tg'],['Bank PO','tb']]}
+  ]},
+  d4:{title:'Arts / Humanities',desc:'Civil Services, Law, Journalism aur Social Work ke liye Arts best stream hai. IAS/IPS ke liye Arts students sabse zyada select hote hain.',
+  courses:[
+    {n:'BA Political Science',d:'3 saal | Civil Services',tags:[['UPSC Path','ta'],['Teaching','tg']]},
+    {n:'BA History/Geography',d:'3 saal',tags:[['Civil Services','ta'],['Teaching','tg']]},
+    {n:'BA English/Hindi',d:'3 saal',tags:[['Journalism','tb'],['Teaching','tg']]},
+    {n:'LLB / BA LLB',d:'5 saal | CLAT Exam',tags:[['Lawyer/Judge','ta'],['Prestigious','tg']]},
+    {n:'Social Work (BSW)',d:'3 saal',tags:[['NGO Jobs','tg'],['Rural Dev','tb']]},
+    {n:'Mass Communication',d:'3 saal | Media',tags:[['TV/News','tb'],['Digital Media','ta']]}
+  ]},
+  d5:{title:'ITI / Polytechnic (Direct — Bina 12th ke)',desc:'12th ki zarurat nahi! Sarkari ITI mein fees almost free hoti hai. 1-2 saal mein seedha job. Rural areas mein sabse practical choice.',
+  courses:[
+    {n:'ITI Electrician',d:'2 saal | Free Govt ITI',tags:[['Rural Demand','tg'],['Solar/Wiring','ta']]},
+    {n:'ITI Computer Operator',d:'1 saal | Digital India',tags:[['Office Jobs','tb'],['Easy Entry','tg']]},
+    {n:'ITI Solar Technician',d:'1 saal | Growing Field',tags:[['Future Job','tg'],['Rural Dev','ta']]},
+    {n:'ITI Fitter/Mechanic',d:'2 saal | Factory Jobs',tags:[['Industrial','tb'],['Apprenticeship','tg']]},
+    {n:'Polytechnic Diploma',d:'3 saal | Engg. Diploma',tags:[['B.Tech Lateral','ta'],['Diploma Engg','tb']]},
+    {n:'ITI Welder',d:'2 saal | Good Scope',tags:[['Factory Jobs','tg'],['Abroad Scope','tb']]}
+  ]}
+};
+
+const allCourses = [
+  // After 10th
+  {cat:'10',icon:'⚡',bg:'#FEF0EA',n:'ITI — Electrician',stream:'After 10th',desc:'Sarkari ITI mein free course. Solar panels, wiring, electrical kaam. Rural areas mein highest demand.',dur:'2 saal',fee:'Almost Free',exam:'State ITI Entrance',job:'Electrician, Solar Tech, MSME'},
+  {cat:'10',icon:'💻',bg:'#FEF0EA',n:'ITI — Computer Operator (COPA)',stream:'After 10th',desc:'1 saal mein digital skills seekho. Government offices aur banks mein job.',dur:'1 saal',fee:'Almost Free',exam:'State ITI Entrance',job:'Computer Operator, Data Entry'},
+  {cat:'10',icon:'🔧',bg:'#FEF0EA',n:'Polytechnic Diploma',stream:'After 10th',desc:'3 saal engineering diploma. B.Tech mein lateral entry milti hai. Govt jobs ke liye valid.',dur:'3 saal',fee:'₹5K-20K/year',exam:'State Polytechnic CET',job:'Diploma Engineer, Junior Engineer'},
+  {cat:'10',icon:'🎖️',bg:'#FEF0EA',n:'NDA (Apply from 10th)',stream:'After 10th',desc:'Army, Navy, Air Force officer bano. UPSC NDA exam. 10th ke baad apply shuru kar sakte ho.',dur:'3 saal training',fee:'Free + Stipend',exam:'UPSC NDA',job:'Army/Navy/Air Force Officer'},
+  {cat:'10',icon:'☀️',bg:'#FEF0EA',n:'ITI — Solar Technician',stream:'After 10th',desc:'Future ka sabse growing field. Gaon gaon mein solar lagta hai. PM Surya Ghar scheme se bahut demand.',dur:'1 saal',fee:'Almost Free',exam:'State ITI',job:'Solar Tech, PM Surya Ghar jobs'},
+  // PCM
+  {cat:'pcm',icon:'⚙️',bg:'#EFF6FF',n:'B.Tech / B.E. (Engineering)',stream:'Science PCM',desc:'India ka sabse popular degree. JEE se IIT/NIT. CS, Mechanical, Civil, Electrical — 40+ branches.',dur:'4 saal',fee:'₹50K-3L/year',exam:'JEE Mains / JEE Advanced',job:'Software Engineer, Civil, Mech Engineer'},
+  {cat:'pcm',icon:'💻',bg:'#EFF6FF',n:'BCA (Bachelor of Computer Applications)',stream:'Science PCM',desc:'Software development aur IT. JEE zaruri nahi. Bahut colleges mein merit se admission.',dur:'3 saal',fee:'₹20K-1L/year',exam:'12th marks based / State CET',job:'Software Developer, Web Dev, IT Analyst'},
+  {cat:'pcm',icon:'📐',bg:'#EFF6FF',n:'B.Sc Mathematics / Statistics',stream:'Science PCM',desc:'Research, data science, actuarial science ke liye. Government jobs mein bhi kaam aata hai.',dur:'3 saal',fee:'₹10K-50K/year',exam:'DU/State University Entrance',job:'Data Analyst, Statistician, Teacher'},
+  {cat:'pcm',icon:'⚓',bg:'#EFF6FF',n:'Merchant Navy',stream:'Science PCM',desc:'Sea mein career. India ka sabse zyada salary dene wala non-corporate field.',dur:'3 saal',fee:'₹2L-8L total',exam:'IMU CET',job:'Maritime Officer, Marine Engineer'},
+  {cat:'pcm',icon:'🏗️',bg:'#EFF6FF',n:'Architecture (B.Arch)',stream:'Science PCM',desc:'Building design aur planning. Smart cities, rural housing ke liye huge scope.',dur:'5 saal',fee:'₹50K-2L/year',exam:'NATA + JEE Paper 2',job:'Architect, Urban Planner, Designer'},
+  {cat:'pcm',icon:'🎖️',bg:'#EFF6FF',n:'NDA — Defense Officer',stream:'Science PCM',desc:'Army, Navy, Air Force mein officer. UPSC NDA dono PCM aur Arts se de sakte hain.',dur:'3 saal training',fee:'Free + Stipend',exam:'UPSC NDA',job:'Army/Navy/Air Force Officer'},
+  // PCB
+  {cat:'pcb',icon:'🩺',bg:'#E1F5EE',n:'MBBS — Doctor',stream:'Science PCB',desc:'Sabse respected medical degree. NEET se sarkari college mein ₹10K-1L/year fees. 5.5 saal.',dur:'5.5 saal',fee:'₹10K-1L/year (Govt)',exam:'NEET UG',job:'Doctor, Surgeon, Medical Officer'},
+  {cat:'pcb',icon:'🏥',bg:'#E1F5EE',n:'B.Sc Nursing',stream:'Science PCB',desc:'Healthcare mein guaranteed job. Rural health centers mein bahut demand. Sarkari college mein fees bahut kam.',dur:'4 saal',fee:'₹5K-50K/year',exam:'State Nursing Entrance',job:'Staff Nurse, ANM, Health Worker'},
+  {cat:'pcb',icon:'💊',bg:'#E1F5EE',n:'B.Pharm (Pharmacy)',stream:'Science PCB',desc:'Medical shops se pharma companies tak. NEET zaruri nahi. Aasaan admission.',dur:'4 saal',fee:'₹20K-1L/year',exam:'State Pharmacy Entrance',job:'Pharmacist, Drug Inspector, Pharma R&D'},
+  {cat:'pcb',icon:'🌿',bg:'#E1F5EE',n:'BAMS (Ayurveda Doctor)',stream:'Science PCB',desc:'NEET se admission. Ayurvedic doctor bano. Rural areas mein government hospitals mein scope.',dur:'5.5 saal',fee:'₹15K-80K/year',exam:'NEET UG',job:'Ayurvedic Doctor, Govt Hospital'},
+  {cat:'pcb',icon:'🐄',bg:'#E1F5EE',n:'Veterinary Science (B.V.Sc)',stream:'Science PCB',desc:'Pashuon ka doctor bano. Rural aur agricultural areas mein bahut scope. Sarkari job milti hai.',dur:'5.5 saal',fee:'₹10K-50K/year',exam:'NEET / State Vet Exam',job:'Vet Officer, Animal Husbandry Dept'},
+  {cat:'pcb',icon:'🔬',bg:'#E1F5EE',n:'B.Sc Biology / Biotechnology',stream:'Science PCB',desc:'Research, lab technician, teaching. Government labs mein jobs. Low fees mein good career.',dur:'3 saal',fee:'₹8K-40K/year',exam:'University Entrance / Merit',job:'Lab Technician, Researcher, Teacher'},
+  // Commerce
+  {cat:'com',icon:'📊',bg:'#FEF3DC',n:'CA — Chartered Accountant',stream:'Commerce',desc:'India ka top professional degree. Finance aur business ka raja. ICAI ka 3-level course.',dur:'4-5 saal',fee:'₹20K-50K total',exam:'CA Foundation, Inter, Final',job:'Chartered Accountant, CFO, Tax Consultant'},
+  {cat:'com',icon:'🎓',bg:'#FEF3DC',n:'B.Com (Bachelor of Commerce)',stream:'Commerce',desc:'3 saal ka versatile degree. Accounts, taxation, banking ke liye base. Govt jobs bhi.',dur:'3 saal',fee:'₹5K-50K/year',exam:'Merit / State CET',job:'Accountant, Tax Officer, Bank Clerk'},
+  {cat:'com',icon:'🎓',bg:'#FEF3DC',n:'B.Com (Hons)',stream:'Commerce',desc:'Regular B.Com se better. DU, Christ jaise top colleges mein. CA ke saath best combination.',dur:'3 saal',fee:'₹10K-80K/year',exam:'CUET / College Entrance',job:'Senior Accountant, Finance Manager'},
+  {cat:'com',icon:'💼',bg:'#FEF3DC',n:'BBA (Bachelor of Business Admin)',stream:'Commerce',desc:'Business management seekho. 3 saal BBA phir 2 saal MBA — corporate mein best combo.',dur:'3 saal',fee:'₹20K-1L/year',exam:'IPU CET / State CET',job:'Manager, Marketing, Business Analyst'},
+  {cat:'com',icon:'📈',bg:'#FEF3DC',n:'B.Sc Economics / Economics Hons',stream:'Commerce',desc:'Research, civil services, banking ke liye. DU economics famous hai. Data analysis skills.',dur:'3 saal',fee:'₹8K-60K/year',exam:'CUET / State University',job:'Economist, Data Analyst, Civil Services'},
+  {cat:'com',icon:'⚖️',bg:'#FEF3DC',n:'CS — Company Secretary',stream:'Commerce',desc:'Corporate law aur compliance. ICSI ka course. CA ke saath best combination.',dur:'3-4 saal',fee:'₹20K-40K total',exam:'CS Foundation, Executive, Professional',job:'Company Secretary, Corporate Lawyer'},
+  // Arts
+  {cat:'arts',icon:'🏛️',bg:'#F5F3FF',n:'BA Political Science',stream:'Arts',desc:'Civil Services ke liye best stream. History, International Relations. UPSC mein sabse popular optional.',dur:'3 saal',fee:'₹4K-40K/year',exam:'CUET / State University',job:'IAS/IPS, Teacher, NGO, Journalist'},
+  {cat:'arts',icon:'📜',bg:'#F5F3FF',n:'BA History',stream:'Arts',desc:'Sabse aasaan stream. Civil services, teaching ke liye. Bahut govt jobs mein kaam aata hai.',dur:'3 saal',fee:'₹4K-30K/year',exam:'Merit / CUET',job:'Teacher, Civil Services, Museum Curator'},
+  {cat:'arts',icon:'🌍',bg:'#F5F3FF',n:'BA Geography',stream:'Arts',desc:'Environment, remote sensing, urban planning ke liye. Geography se IAS mein optional popular.',dur:'3 saal',fee:'₹4K-35K/year',exam:'Merit / CUET',job:'Geographer, GIS Analyst, Civil Services'},
+  {cat:'arts',icon:'🗣️',bg:'#F5F3FF',n:'BA English / Hindi Literature',stream:'Arts',desc:'Journalism, content writing, teaching ke liye. Content creator bhi ban sakte ho.',dur:'3 saal',fee:'₹4K-35K/year',exam:'Merit / CUET',job:'Journalist, Content Writer, Teacher'},
+  {cat:'arts',icon:'⚖️',bg:'#F5F3FF',n:'BA LLB — Law (5 year)',stream:'Arts',desc:'12th ke baad seedha 5 saal law degree. CLAT exam se NLU mein admission. Lawyer ya judge bano.',dur:'5 saal',fee:'₹20K-2L/year',exam:'CLAT / State Law CET',job:'Advocate, Judge, Legal Advisor, IPS'},
+  {cat:'arts',icon:'🤝',bg:'#F5F3FF',n:'BSW — Bachelor of Social Work',stream:'Arts',desc:'Rural development, NGO, government programs. SBI Fellowship ke baad yahi field hoti hai.',dur:'3 saal',fee:'₹5K-40K/year',exam:'Merit based',job:'Social Worker, NGO Officer, Community Dev'},
+  {cat:'arts',icon:'📺',bg:'#F5F3FF',n:'Mass Communication / Journalism',stream:'Arts',desc:'TV, newspaper, digital media mein career. Rural development reporting mein scope.',dur:'3 saal',fee:'₹15K-1L/year',exam:'IIMC, State Univ Entrance',job:'Reporter, Content Creator, PR Manager'},
+  // General / Any Stream
+  {cat:'gen',icon:'🎓',bg:'#ECFEFF',n:'BA (General)',stream:'Any Stream (Arts preferred)',desc:'Kisi bhi subject mein 3 saal BA. Govt jobs ke liye minimum qualification. Flexible.',dur:'3 saal',fee:'₹3K-20K/year',exam:'Merit / CUET',job:'Govt Jobs, Banking, Police, Teaching'},
+  {cat:'gen',icon:'🛡️',bg:'#ECFEFF',n:'B.Sc (General)',stream:'Any Stream (Science preferred)',desc:'Physics, Chemistry, Math ya Biology se 3 saal. Research aur govt jobs ke liye.',dur:'3 saal',fee:'₹5K-30K/year',exam:'Merit / State Entrance',job:'Lab Tech, Teacher, Govt Jobs'},
+  {cat:'gen',icon:'🏨',bg:'#ECFEFF',n:'Hotel Management (BHM)',stream:'Any Stream (10+2)',desc:'Tourism aur hospitality. International jobs. Cooking ya management mein interest ho toh.',dur:'4 saal',fee:'₹30K-2L/year',exam:'NCHM JEE / State',job:'Hotel Manager, Chef, Tourism Officer'},
+  {cat:'gen',icon:'🧑‍🏫',bg:'#ECFEFF',n:'D.El.Ed / B.Ed (Teaching)',stream:'Any Stream (Graduation)',desc:'Sarkari school mein teacher bano. Graduation ke baad B.Ed 2 saal. Stable govt job.',dur:'2 saal (after graduation)',fee:'₹10K-50K/year',exam:'State TET / CTET',job:'Primary/Secondary School Teacher'},
+  {cat:'gen',icon:'💪',bg:'#ECFEFF',n:'Physical Education (B.P.Ed)',stream:'Any Stream',desc:'Sports teacher bano. School mein PE teacher ki bahut demand hai. Govt schools mein.',dur:'2-4 saal',fee:'₹10K-40K/year',exam:'State Entrance',job:'PE Teacher, Sports Coach, NCC Officer'},
+];
+
+const examData = [
+  {cat:'engg',icon:'⚙️',bg:'#EFF6FF',title:'JEE Mains',badge:'Engineering Entrance',badgecol:'pb',
+   who:'12th PCM ke baad. B.Tech/B.E. admissions ke liye.',
+   syllabus:['Physics — Mechanics, Thermodynamics, Optics, Waves, Electricity','Chemistry — Organic, Inorganic, Physical Chemistry','Mathematics — Algebra, Calculus, Coordinate Geometry, Trigonometry'],
+   prep:['11th-12th NCERT books pehle crystal clear karo','Pyq (Previous Year Questions) zaroor solve karo','Khan Academy (free), Physics Wallah (free/cheap) YouTube se padhao','Mock tests dena shuru karo — minimum 20 mock tests','Daily 6-8 ghante padhai — consistency important hai'],
+   resources:['Physics Wallah (Free YouTube)','Khan Academy','NCERT Books (Free PDF)','JEE PYQ Papers (Free Online)','Doubtnut App (Free)'],
+   time:'1-2 saal ki taiyari',salary:'₹4L-25L/year starting'},
+  {cat:'engg',icon:'🔬',bg:'#EFF6FF',title:'JEE Advanced',badge:'IIT Entrance',badgecol:'pb',
+   who:'JEE Mains top 2.5 lakh students ke liye. IIT mein admission ke liye.',
+   syllabus:['JEE Mains se zyada depth mein Physics, Chemistry, Maths','Conceptual questions zyada — rote learning se kaam nahi chalega','Organic Chemistry aur Calculus pe extra focus'],
+   prep:['JEE Mains clear karne ke baad iska plan banao','HC Verma (Physics), MS Chauhan (Organic Chem) books follow karo','IIT ke professors ke YouTube lectures dekho','Time management — paper mein 3 ghante hain, practice karo','Kisi coaching ya online group mein join hona helpful'],
+   resources:['HC Verma Physics (Book)','FIITJEE/Allen Study Material','IIT JEE PYQ 20 saal ke','Unacademy / Vedantu (partial free)'],
+   time:'2 saal rigorous preparation',salary:'₹8L-50L+ (IIT graduate)'},
+  {cat:'med',icon:'🩺',bg:'#E1F5EE',title:'NEET UG',badge:'Medical Entrance',badgecol:'tg',
+   who:'12th PCB ke baad. MBBS, BDS, BAMS, Nursing ke liye.',
+   syllabus:['Biology — Botany aur Zoology (50% weightage — sabse important!)','Chemistry — Organic, Inorganic, Physical','Physics — Mechanics, Optics, Electricity (thoda kam, par zaruri)'],
+   prep:['Biology NCERT line by line yaad karo — NEET mein 90% NCERT se aata hai','Diagrams banana seekho — heart, cell, ecosystem sab','Chemistry ke reactions yaad karo systematically','Physics mein formulas aur numerical practice karo','Daily 5-6 ghante minimum. 1 saal mein 720/720 possible hai'],
+   resources:['NCERT Biology 11th-12th (Free PDF)','Physics Wallah NEET (Free YouTube)','Aakash/Allen Notes (try to borrow)','NEET PYQ 10 saal ke (Free PDF)','NeetPrep App (Free)'],
+   time:'1-2 saal taiyari',salary:'₹6L-25L/year (Govt Doctor)'},
+  {cat:'govt',icon:'🏛️',bg:'#F5F3FF',title:'UPSC Civil Services (IAS/IPS)',badge:'Most Prestigious Govt Exam',badgecol:'tp',
+   who:'Any graduation ke baad. Age 21-32 saal. 6 attempts General category.',
+   syllabus:['Prelims — GS Paper 1 (History, Geography, Polity, Economy, Science) + CSAT (Aptitude)','Mains — 9 papers: Essay, GS 1-4, Optional subject (2 papers), Language papers','Interview — Personality test 275 marks'],
+   prep:['NCERT 6th-12th sab subjects se start karo — yeh base hai','Hindu newspaper daily padhna shuru karo (free online)','Laxmikanth (Polity), Bipin Chandra (History), Shankar IAS (Environment)','Optional subject wisely choose karo — apni graduation subject best rehti hai','3 saal ki continuous preparation average mein lagti hai'],
+   resources:['NCERT Books (Free PDF — ncert.nic.in)','Insights on India (Free Website)','ForumIAS (Free)','The Hindu Newspaper','UPSC Previous Papers (Free)'],
+   time:'2-4 saal',salary:'₹56,100-2,50,000/month (Grade pay)'},
+  {cat:'govt',icon:'📋',bg:'#F5F3FF',title:'SSC CGL',badge:'Group B & C Govt Jobs',badgecol:'tp',
+   who:'Kisi bhi stream se graduation ke baad. Age 18-32. Income Tax, CBI, Customs mein jobs.',
+   syllabus:['Tier 1 — General Intelligence (Reasoning), GK, Quantitative Aptitude, English','Tier 2 — Math aur English depth mein, plus Statistics (optional)'],
+   prep:['Reasoning: RS Aggarwal book se practice karo','Math: Kiran Publication SSC Math (Cheap book, bahut important)','GK: Lucent GK book + daily current affairs','English: Grammar rules + vocabulary daily 10 words','Daily 4-5 ghante. 6-12 mahine mein crack kar sakte ho'],
+   resources:['Kiran SSC CGL Book','Lucent GK (Cheap)','YouTube: Rakesh Yadav (Math, Free)','SSC Adda247 App (Partial Free)','Previous Year Papers (Free Online)'],
+   time:'6-12 mahine',salary:'₹25,000-80,000/month'},
+  {cat:'bank',icon:'🏦',bg:'#FEF3DC',title:'SBI PO / IBPS PO (Bank PO)',badge:'Banking Sector — Officer',badgecol:'ta',
+   who:'Kisi bhi stream se graduation ke baad. Age 20-30 (SBI PO). Best sarkari job in banking.',
+   syllabus:['Prelims — Reasoning (35 marks), Quantitative Aptitude (35), English (30)','Mains — Reasoning+DI, English, Data Analysis, GA/Banking Awareness','Interview + Group Discussion — personality test'],
+   prep:['Reasoning: Puzzles, Seating Arrangement pe focus karo — yeh har baar aata hai','Math: Simplification, DI (Data Interpretation) — speed chahiye','English: Reading Comprehension aur Cloze Test — daily practice karo','Banking GK: RBI, Banks, Recent news yaad rakho','Daily 5-6 ghante. 6-8 mahine ki taiyari'],
+   resources:['Adda247 App (Partial Free)','Oliveboard (Partial Free)','YouTube: Bankers Adda, Study Smart','Gradeup/Testbook Mock Tests (Some Free)','Kiran Bank PO Book'],
+   time:'6-8 mahine',salary:'₹23,000-63,000/month starting'},
+  {cat:'bank',icon:'🏦',bg:'#FEF3DC',title:'IBPS Clerk / SBI Clerk',badge:'Banking Sector — Clerk',badgecol:'ta',
+   who:'Graduation ke baad. PO se thoda aasaan. Entry level banking job.',
+   syllabus:['Prelims — Reasoning (35), Numerical Ability (35), English (30)','Mains — Reasoning, English, Quantitative, Computer Knowledge, GK'],
+   prep:['PO se syllabus similar hai — ek taiyari mein dono cover hote hain','Speed pe focus karo — 20 questions 20 minutes mein','Computer knowledge: MS Office basics, internet, banking software','GK: Current affairs last 6 months yaad karo'],
+   resources:['Adda247 (Free YouTube + App)','SSC Adda Current Affairs App','Memory Based Question Papers (Free Online)'],
+   time:'4-6 mahine',salary:'₹19,900-47,920/month'},
+  {cat:'law',icon:'⚖️',bg:'#EFF6FF',title:'CLAT — Law Entrance',badge:'National Law University Entrance',badgecol:'tb',
+   who:'12th ke baad 5 year BA LLB ke liye, ya graduation ke baad 3 year LLB ke liye.',
+   syllabus:['English Language — Reading Comprehension, Vocabulary, Grammar','Current Affairs + GK — last 1 year ki important news','Legal Reasoning — Legal principles pe questions (no law background needed)','Logical Reasoning — Analogies, Arguments, Assumptions','Quantitative Techniques — Class 10 level Math'],
+   prep:['English aur Current Affairs pe sabse zyada focus karo — yeh 70% hai','The Hindu ya Indian Express daily padhna shuru karo','Legal Reasoning ke liye CLAT sample papers practice karo','Math basic hai — school level ka revision karo','4-6 mahine ki dedicated taiyari kaafi hai'],
+   resources:['CLAT Previous Year Papers (Free)','CLATGyan Website (Free Resources)','YouTube: Legal Edge, Pahuja Law Academy','The Hindu Newspaper','Lucent GK'],
+   time:'4-6 mahine',salary:'₹6L-25L starting (NLU graduate)'},
+];
+
+const jobsData = {
+  '10':{
+    govt:[
+      {n:'Army Soldier (GD / Tech)',org:'Indian Army',sal:'₹21,700-69,100/month',q:'10th pass, Physical + Medical Test'},
+      {n:'Railway Group D',org:'Indian Railways',sal:'₹18,000-56,900/month',q:'10th pass + ITI preferred'},
+      {n:'Police Constable',org:'State Police',sal:'₹19,900-63,200/month',q:'10th/12th (state wise), Physical Test'},
+      {n:'Anganwadi Worker/Helper',org:'State Govt (ICDS)',sal:'₹8,000-12,000/month',q:'10th pass, Local area preference'},
+      {n:'ITI Apprenticeship (NAPS)',org:'Govt + Private Companies',sal:'₹5,000-9,000/month stipend',q:'10th + ITI Certificate'},
+      {n:'Postal Assistant / Mail Guard',org:'India Post',sal:'₹18,000-56,900/month',q:'10th/12th pass, Written Exam'},
+    ],
+    pvt:[
+      {n:'Factory Worker / Operator',org:'Manufacturing Companies',sal:'₹10,000-18,000/month',q:'10th + ITI Certificate'},
+      {n:'Delivery Partner',org:'Amazon, Flipkart, Swiggy',sal:'₹15,000-25,000/month',q:'10th pass + Bike + License'},
+      {n:'Solar Panel Technician',org:'Solar Companies',sal:'₹12,000-22,000/month',q:'10th + Solar ITI Certificate'},
+      {n:'Construction Supervisor',org:'Real Estate Companies',sal:'₹12,000-20,000/month',q:'10th + Polytechnic Diploma'},
+    ]
+  },
+  '12':{
+    govt:[
+      {n:'SSC CHSL (LDC/DEO)',org:'Central Govt Offices',sal:'₹19,900-63,200/month',q:'12th pass any stream'},
+      {n:'Railway Clerk / Ticket Collector',org:'Indian Railways',sal:'₹21,700-69,100/month',q:'12th pass'},
+      {n:'Banking — Clerk (IBPS/SBI)',org:'Nationalized Banks',sal:'₹19,900-47,920/month',q:'12th + Graduation (preferred)'},
+      {n:'Army — Clerk / SKT / Tech',org:'Indian Army',sal:'₹21,700-69,100/month',q:'12th Science/Arts'},
+      {n:'Police Sub Inspector (SI)',org:'State Police',sal:'₹35,400-1,12,400/month',q:'12th + Graduation + Physical'},
+      {n:'Air Force Airman (X/Y Group)',org:'Indian Air Force',sal:'₹21,700-69,100/month',q:'12th PCM (X Group) / Any (Y Group)'},
+      {n:'Navy MR / AA / SSR',org:'Indian Navy',sal:'₹21,700-69,100/month',q:'10th/12th Science'},
+      {n:'Insurance Agent / LIC AAO',org:'LIC / GIC Insurance',sal:'₹20,000-80,000/month',q:'12th + Exam'},
+    ],
+    pvt:[
+      {n:'BPO / Call Center Executive',org:'TCS, Infosys, Wipro BPO',sal:'₹15,000-28,000/month',q:'12th pass, Good English'},
+      {n:'Retail Sales Executive',org:'Reliance, D-Mart, Flipkart',sal:'₹12,000-22,000/month',q:'12th pass'},
+      {n:'Content Creator / Social Media',org:'Self / Brands',sal:'₹10,000-1L+/month',q:'12th + Skills + Smartphone'},
+      {n:'Nursing Staff (Private Hospital)',org:'Private Hospitals',sal:'₹15,000-35,000/month',q:'12th PCB + Nursing Certificate'},
+    ]
+  },
+  'grad':{
+    govt:[
+      {n:'IAS / IPS / IFS (Civil Services)',org:'UPSC — Central Govt',sal:'₹56,100-2,50,000/month',q:'Any Graduation + UPSC Exam'},
+      {n:'SSC CGL (Income Tax / CBI)',org:'Central Govt Offices',sal:'₹25,000-81,100/month',q:'Any Graduation + SSC CGL Exam'},
+      {n:'Bank PO (SBI PO / IBPS PO)',org:'Nationalized Banks',sal:'₹23,700-63,840/month',q:'Any Graduation + Bank PO Exam'},
+      {n:'State PCS Officer (SDM, BDO)',org:'State Govt (UPPSC etc)',sal:'₹47,600-2,08,700/month',q:'Any Graduation + State PCS Exam'},
+      {n:'Teaching — PGT / TGT',org:'KVS / State Govt Schools',sal:'₹35,400-1,12,400/month',q:'Graduation + B.Ed + TET/CTET'},
+      {n:'RBI Grade B Officer',org:'Reserve Bank of India',sal:'₹35,150-1,17,890/month',q:'Graduation 60% + RBI Exam'},
+      {n:'Defence Officer (CDS/AFCAT)',org:'Army / Navy / Air Force',sal:'₹56,100-1,77,500/month',q:'Graduation + CDS Exam'},
+      {n:'Navodaya / KV Teacher',org:'KVS / NVS',sal:'₹35,400-67,000/month',q:'Graduation + B.Ed + TET'},
+      {n:'Agriculture Officer (AO)',org:'State Agri Dept',sal:'₹35,400-80,000/month',q:'B.Sc Agriculture + State Exam'},
+      {n:'Block Development Officer (BDO)',org:'State Panchayat Raj',sal:'₹47,600-1,51,100/month',q:'Graduation + State PCS Exam'},
+    ],
+    pvt:[
+      {n:'Software Engineer',org:'TCS, Infosys, Wipro, Startups',sal:'₹3.5L-15L/year',q:'B.Tech CS/IT or BCA + Skills'},
+      {n:'MBA — Management Trainee',org:'FMCG, Banks, Companies',sal:'₹5L-20L/year',q:'MBA from good college'},
+      {n:'Chartered Accountant',org:'Firms, Companies',sal:'₹7L-30L+/year',q:'CA Final cleared'},
+      {n:'Digital Marketing Manager',org:'Any Company / Freelance',sal:'₹3L-12L/year',q:'Any Graduation + Digital Skills'},
+      {n:'NGO / Social Sector Officer',org:'NGOs, CSR Departments',sal:'₹2.5L-8L/year',q:'BSW / Any Graduation + Passion'},
+      {n:'Content Writer / Journalist',org:'Media Houses / Freelance',sal:'₹2.5L-10L/year',q:'BA English/Journalism + Portfolio'},
+    ]
+  }
+};
+
+const schemes = [
+  {icon:'🎓',n:'NSP — National Scholarship Portal',by:'GOI',desc:'SC/ST/OBC/Minority students ke liye pre-matric aur post-matric scholarship. Online apply: scholarships.gov.in',tags:[['SC/ST/OBC','tg'],['Pre & Post Matric','tb'],['Free Apply','ta']]},
+  {icon:'👩‍🎓',n:'PM Yasasvi Scholarship',by:'Ministry of Social Justice',desc:'OBC, EBC aur DNT students ke liye. 9th-12th class mein ₹75,000 tak scholarship per year.',tags:[['OBC/EBC','tg'],['₹75,000/year','ta'],['9th-12th','tb']]},
+  {icon:'🌾',n:'PMKVY — Pradhan Mantri Kaushal Vikas Yojana',by:'Ministry of Skill Dev',desc:'Free skill training + certificate + ₹8,000 reward. 300+ trades mein ITI-type training.',tags:[['Free Training','tg'],['₹8,000 Reward','ta'],['300+ Courses','tb']]},
+  {icon:'☀️',n:'PM Surya Ghar (Solar Rooftop)',by:'Ministry of New Energy',desc:'Solar technicians ki bahut demand. Rural areas mein free solar installation. Technician ki guarantee job.',tags:[['Solar Jobs','tg'],['Rural Dev','ta'],['Guaranteed Work','tb']]},
+  {icon:'💻',n:'PM e-Vidya / Digital India',by:'GOI',desc:'Free online education. SWAYAM portal par IIT professors ke free courses. DIKSHA app mein free content.',tags:[['Free Courses','tg'],['IIT Faculty','tb'],['Online Learning','ta']]},
+  {icon:'🏦',n:'Vidya Lakshmi Education Loan',by:'GOI Portal',desc:'38+ banks ek jagah. ₹4L tak bina guarantor ke loan. Interest subsidy bhi milti hai SC/ST ke liye.',tags:[['Easy Loan','tg'],['38+ Banks','tb'],['Subsidy Available','ta']]},
+  {icon:'🌱',n:'SBI Youth for India Fellowship',by:'State Bank of India',desc:'Rural development mein 13 mahine kaam karo. ₹15,000/month stipend. Applications Feb-March mein.',tags:[['₹15K/month','ta'],['Rural Dev','tg'],['13 Months','tb']]},
+  {icon:'👩‍🌾',n:'Beti Bachao Beti Padhao + Sukanya Samriddhi',by:'GOI',desc:'Beti ki padhai ke liye savings account. ₹250 se shuru, 8.2% interest. 21 saal mein tax-free paise.',tags:[['Girls Education','tg'],['8.2% Interest','ta'],['Tax Free','tb']]},
+];
+
+// stories removed — replaced by Opportunities section
+
+// ===== FUNCTIONS =====
+function go(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active'));
+  const map={home:'Home',finder:'Career',courses:'Courses',examprep:'Exam',jobs:'Job',schemes:'Schemes',opportunities:'Opportunities'};
+  document.querySelectorAll('.nav-link').forEach(b=>{if(b.textContent.includes(map[page]))b.classList.add('active');});
+  window.scrollTo(0,0);
+}
+function toggleMenu(){document.getElementById('mobNav').classList.toggle('open');}
+
+function runFinder(){
+  const n=document.getElementById('fn').value.trim()||'Dost';
+  const c=document.getElementById('fc').value;
+  if(!c){alert('Pehle apni class select karo!');return;}
+  document.getElementById('fresult').style.display='block';
+  ['fc10','fc12','fcgrad'].forEach(x=>document.getElementById(x).style.display='none');
+  document.getElementById('fgreet').textContent=`Namaste, ${n}! 👋`;
+  if(c==='10'){
+    document.getElementById('fsub').textContent='10th ke baad tumhare paas ye amazing paths hain. Neeche click karke explore karo!';
+    document.getElementById('fc10').style.display='block';
+  } else if(c==='grad'){
+    document.getElementById('fsub').textContent='Graduation ke baad tumhare liye best options:';
+    document.getElementById('fcgrad').style.display='block';
+    const gradCourses=[
+      {n:'UPSC — IAS/IPS/IFS',d:'Most Prestigious',tags:[['tg','Govt Job'],['ta','UPSC Exam']]},
+      {n:'SSC CGL (Income Tax/CBI)',d:'Central Govt Officer',tags:[['tg','Sarkari Job'],['tb','SSC Exam']]},
+      {n:'Bank PO (SBI/IBPS)',d:'Banking Officer',tags:[['tg','Bank Job'],['ta','PO Exam']]},
+      {n:'MBA (CAT/MAT)',d:'Business Management',tags:[['tb','Private Sector'],['ta','CAT Exam']]},
+      {n:'B.Ed + TET — Teacher',d:'Govt School Teacher',tags:[['tg','Teaching'],['tb','Stable Job']]},
+      {n:'State PCS (SDM/BDO)',d:'State Govt Officer',tags:[['tg','Sarkari Job'],['ta','State Exam']]},
+    ];
+    document.getElementById('fcgradc').innerHTML=gradCourses.map(c=>`<div class="big-card"><div class="bc-title">${c.n}</div><div class="bc-sub" style="margin-bottom:6px">${c.d}</div><div class="pills">${c.tags.map(([cl,t])=>`<span class="pill p${cl}">${t}</span>`).join('')}</div></div>`).join('');
+  } else {
+    const map={'12pcm':['d1','Science PCM'],'12pcb':['d2','Science PCB'],'12com':['d3','Commerce'],'12arts':['d4','Arts/Humanities']};
+    const [key,label]=map[c];
+    document.getElementById('fsub').textContent=`12th ${label} ke baad tumhare best options:`;
+    document.getElementById('fc12t').textContent=`12th ${label} — Career Options`;
+    document.getElementById('fc12').style.display='block';
+    const sd=streamDet[key];
+    document.getElementById('fc12c').innerHTML=sd.courses.map((cr,i)=>`
+      <div class="big-card" onclick="showCourseByStream('${key}',${i})">
+        <div class="bc-title">${cr.n}</div><div class="bc-sub">${cr.d}</div>
+        <div class="tags" style="margin-top:6px">${cr.tags.map(([t,cl])=>`<span class="tag ${cl}">${t}</span>`).join('')}</div>
+          <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+            <button class="btn btn-o" onclick="event.stopPropagation();showCourseByStream('${key}',${i})">Read more</button>
+          </div>
+      </div>`).join('');
+  }
+  document.getElementById('fresult').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function tdet(id){
+  const panels=['d1','d2','d3','d4','d5'];
+  const keyMap={d1:'d1',d2:'d2',d3:'d3',d4:'d4',d5:'d5'};
+  const sd=streamDet[id];
+  const panel=document.getElementById(id);
+  if(panel.style.display==='block'){panel.style.display='none';return;}
+  panels.forEach(p=>document.getElementById(p).style.display='none');
+  panel.innerHTML=`<div class="det-head"><div class="det-title">${sd.title}</div><div class="x-btn" onclick="document.getElementById('${id}').style.display='none'">✕</div></div><div class="det-desc">${sd.desc}</div><div class="c-grid">${sd.courses.map(c=>`<div class="c-card"><div class="c-name">${c.n}</div><div class="c-det">${c.d}</div><div class="tags">${c.tags.map(([t,cl])=>`<span class="tag ${cl}">${t}</span>`).join('')}</div></div>`).join('')}</div>`;
+  panel.style.display='block';
+}
+
+function filterC(cat,btn){
+  document.querySelectorAll('#page-courses .tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const list=cat==='all'?allCourses:allCourses.filter(c=>c.cat===cat);
+  document.getElementById('coursesGrid').innerHTML=list.map((c)=>{
+    const idx = allCourses.indexOf(c);
+    return `
+    <div class="big-card" onclick="showCourseByIndex('all',${idx})">
+      <div class="bc-head"><div class="bc-icon" style="background:${c.bg}">${c.icon}</div><div><div class="bc-title">${c.n}</div><div class="bc-sub">${c.stream}</div></div></div>
+      <div class="bc-desc">${c.desc}</div>
+      <div class="pills">
+        <span class="pill pg">⏱ ${c.dur}</span>
+        <span class="pill pa">💰 ${c.fee}</span>
+        <span class="pill pb">📝 ${c.exam}</span>
+      </div>
+      <div style="margin-top:7px;font-size:13.5px;color:var(--text3);">💼 ${c.job}</div>
+      <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+        <button class="btn btn-o" onclick="event.stopPropagation();showCourseByIndex('all',${idx})">Read more</button>
+      </div>
+    </div>`}).join('');
+}
+
+function filterE(cat,btn){
+  document.querySelectorAll('#page-examprep .tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const list=cat==='all'?examData:examData.filter(e=>e.cat===cat);
+  document.getElementById('examGrid').innerHTML=list.map(e=>`
+    <div class="exam-card">
+      <div class="exam-head">
+        <div class="exam-icon" style="background:${e.bg}">${e.icon}</div>
+        <div>
+          <div class="exam-title">${e.title}</div>
+          <span class="exam-badge ${e.badgecol}">${e.badge}</span>
+        </div>
+      </div>
+      <div class="exam-body">
+        <div class="exam-section">
+          <div class="exam-sec-title">📌 Kaun de sakta hai?</div>
+          <div style="font-size:15px;color:var(--text2)">${e.who}</div>
+        </div>
+        <div class="exam-section">
+          <div class="exam-sec-title">📚 Syllabus</div>
+          <ul class="exam-list">${e.syllabus.map(s=>`<li>${s}</li>`).join('')}</ul>
+        </div>
+        <div class="exam-section">
+          <div class="exam-sec-title">💡 Taiyari kaise karo?</div>
+          <ul class="exam-list">${e.prep.map(p=>`<li>${p}</li>`).join('')}</ul>
+        </div>
+        <div class="exam-section">
+          <div class="exam-sec-title">🆓 Free Resources</div>
+          <div class="resource-row">${e.resources.map(r=>`<span class="res-tag">${r}</span>`).join('')}</div>
+        </div>
+        <div style="display:flex;gap:1rem;margin-top:0.8rem;flex-wrap:wrap">
+          <span style="font-size:14px;color:var(--text2)">⏱ <b>Taiyari:</b> ${e.time}</span>
+          <span style="font-size:14px;color:var(--green)">💰 <b>Salary:</b> ${e.salary}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function showJobs(level,btn){
+  document.querySelectorAll('#page-jobs .tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const d=jobsData[level];
+  const labels={10:'10th Pass ke baad',12:'12th Pass ke baad',grad:'Graduation ke baad'};
+  document.getElementById('jobsContent').innerHTML=`
+    <div class="jobs-section">
+      <div class="jobs-header">🏛️ Government Jobs — ${labels[level]}</div>
+      <div class="jobs-body">${d.govt.map(j=>`
+        <div class="job-row">
+          <div><div class="job-name">${j.n}</div><div class="job-org">${j.org}</div><div style="font-size:13px;color:var(--text3);margin-top:2px">📋 ${j.q}</div></div>
+          <div class="job-salary">${j.sal}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+    ${d.pvt?`<div class="jobs-section">
+      <div class="jobs-header" style="background:var(--blue)">💼 Private Sector Jobs — ${labels[level]}</div>
+      <div class="jobs-body">${d.pvt.map(j=>`
+        <div class="job-row">
+          <div><div class="job-name">${j.n}</div><div class="job-org">${j.org}</div><div style="font-size:13px;color:var(--text3);margin-top:2px">📋 ${j.q}</div></div>
+          <div class="job-salary" style="color:var(--blue)">${j.sal}</div>
+        </div>`).join('')}
+      </div>
+    </div>`:''}`;
+}
+
+function wa(name,detail){
+  const msg=`🎓 Career Option: *${name}*\n📋 ${detail}\n\nAur options ke liye: Mera Career Finder dekho!`;
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+}
+
+/* COURSE MODAL FUNCTIONS */
+function openCourseModal(course){
+  if(!course) return;
+  document.getElementById('modalTitle').textContent = course.n || course.name || '';
+  document.getElementById('modalSub').textContent = course.stream? (course.stream + (course.dur?(' — '+course.dur):'')) : (course.dur || '');
+  // Build modal body with richer fields
+  let body = '';
+  body += `<div>${course.desc || course.d || ''}</div>`;
+  if(course.requirements) body += `<div style="margin-top:10px"><b>Requirements:</b> ${course.requirements}</div>`;
+  if(course.howToStart) body += `<div style="margin-top:8px"><b>How to start:</b> ${course.howToStart}</div>`;
+  if(course.training) body += `<div style="margin-top:8px"><b>Training / Schemes:</b> ${course.training}</div>`;
+  if(course.income) body += `<div style="margin-top:8px;color:var(--green)"><b>Expected income:</b> ${course.income}</div>`;
+  if(course.contact) body += `<div style="margin-top:8px"><b>Contact / Apply:</b> ${course.contact}</div>`;
+  document.getElementById('modalBody').innerHTML = body;
+
+  const meta = document.getElementById('modalMeta'); meta.innerHTML='';
+  if(course.dur) meta.innerHTML += `<span class="modal-pill">⏱ ${course.dur}</span>`;
+  if(course.fee) meta.innerHTML += `<span class="modal-pill">💰 ${course.fee}</span>`;
+  if(course.exam) meta.innerHTML += `<span class="modal-pill">📝 ${course.exam}</span>`;
+  if(course.job) meta.innerHTML += `<span class="modal-pill">💼 ${course.job}</span>`;
+
+  const tags = document.getElementById('modalTags'); tags.innerHTML='';
+  if(course.tags){
+    course.tags.forEach(t=>{
+      if(Array.isArray(t)) tags.innerHTML += `<span class="tag ${t[1]||''}">${t[0]}</span>`;
+      else tags.innerHTML += `<span class="tag tg">${t}</span>`;
+    });
+  }
+
+  // Update share button to open WA with concise message for this opportunity
+  document.getElementById('modalWaBtn').onclick = function(e){ e.stopPropagation(); wa(course.n, (course.dur?course.dur+' | ':'') + (course.job?course.job:'')) };
+  document.getElementById('courseModalOverlay').style.display='flex';
+  window.scrollTo(0,0);
+}
+function closeCourseModal(){ document.getElementById('courseModalOverlay').style.display='none'; }
+function modalShare(){ document.getElementById('modalWaBtn').click(); }
+
+function showCourseByIndex(source, idx){
+  let course=null;
+  if(source==='all') course = allCourses[idx];
+  if(!course) return;
+  // create shallow copy and add helpful defaults
+  const copy = Object.assign({}, course);
+  if(!copy.desc && copy.d) copy.desc = copy.d;
+  if(!copy.requirements){
+    copy.requirements = (copy.cat==='10')? '10th pass' : '12th pass (stream as required by course)';
+  }
+  if(!copy.howToStart){
+    copy.howToStart = copy.exam? `Prepare for ${copy.exam} or apply via college merit lists.` : 'Apply to local colleges or training centres; check state admission portals.';
+  }
+  if(!copy.training) copy.training = copy.exam? `Entrance coaching / NCERT / state CET` : 'Local ITI, PMKVY or college courses';
+  if(!copy.income) copy.income = copy.job? 'Varies depending on role and location' : 'Varies';
+  if(!copy.contact) copy.contact = 'Local college, training centre or state admission portal';
+  openCourseModal(copy);
+}
+function showCourseByStream(streamKey, idx){
+  const sd = streamDet[streamKey]; if(!sd) return;
+  const c = sd.courses[idx]; if(!c) return;
+  const course = {n:c.n, desc:c.d, dur:c.d, tags:c.tags, exam:c.exam||'', fee:c.fee||'', job:c.job||''};
+  // enrich defaults
+  if(!course.requirements) course.requirements = '12th pass (relevant stream)';
+  if(!course.howToStart) course.howToStart = c.d || 'Apply via college admissions or entrance exams';
+  if(!course.training) course.training = 'State ITI / College / Coaching depending on course';
+  if(!course.income) course.income = 'Varies by role and location';
+  if(!course.contact) course.contact = 'Local training centre or college admissions office';
+  openCourseModal(course);
+}
+
+// INIT
+filterC('all',document.querySelector('#page-courses .tab'));
+filterE('all',document.querySelector('#page-examprep .tab'));
+showJobs('10',document.querySelector('#page-jobs .tab'));
+document.getElementById('schemesDiv').innerHTML=schemes.map(s=>`
+  <div class="scheme-card">
+    <div class="sch-head"><div class="sch-icon">${s.icon}</div><div><div class="sch-name">${s.n}</div><div class="sch-by">${s.by}</div></div></div>
+    <div class="sch-desc">${s.desc}</div>
+    <div class="tags">${s.tags.map(([t,cl])=>`<span class="tag ${cl}">${t}</span>`).join('')}</div>
+  </div>`).join('');
+const opportunities = [
+  {icon:'🔧',n:'Solar Technician',dur:'1 year',fee:'Free/Low',desc:'Installation & maintenance of solar panels — growing demand in rural areas.',job:'Solar Installer, Technician',requirements:'Basic 10th pass preferred; physically fit',howToStart:'Join PMKVY or local ITI solar courses; apprentice with a local installer',training:'PMKVY, State ITI, Private solar training centers',income:'₹10k-30k/month (initial) — higher with own business',contact:'Check PMKVY centers / local ITI'},
+  {icon:'🌾',n:'Agri Entrepreneurship',dur:'Ongoing',fee:'Varies',desc:'Value-add activities like food processing, cold storage, organic produce, and dairy aggregation.',job:'Small agri-business owner',requirements:'Interest in farming and basic bookkeeping',howToStart:'Start a small pilot: process one product (pickles, oilseed), sell locally; join local FPOs',training:'Krishi Vigyan Kendra (KVK), NABARD schemes, state agriculture dept. training',income:'Varies widely — ₹5k-50k+/month depending on scale',contact:'Visit nearest KVK / Agriculture extension office'},
+  {icon:'🧵',n:'Skill Trades — Tailoring & Mechanic',dur:'3-12 months',fee:'Low/Free',desc:'Practical trade skills leading to self-employment or local jobs.',job:'Tailor, Mechanic, Repair Shop',requirements:'Willingness to learn and do hands-on work',howToStart:'Join PMKVY / local skill center; practice by repairing/ tailoring for neighbors',training:'PMKVY, local NGOs, apprenticeship with local shops',income:'₹8k-25k/month initially; can grow to ₹30k+ with own shop',contact:'Local ITI / skill centres / PMKVY centres'},
+  {icon:'💻',n:'Digital & Remote Work',dur:'Self-paced',fee:'Low start',desc:'Freelancing: data entry, content creation, online tutoring — start with a smartphone and low-cost internet.',job:'Freelancer, Tutor, Virtual Assistant',requirements:'Basic English (for some roles), smartphone, internet',howToStart:'Build a small portfolio (tutoring or sample work), register on freelance portals or local agencies',training:'Online free courses (SWAYAM, YouTube), local digital skilling programs',income:'₹5k-50k+/month depending on skills and hours',contact:'Start with neighborhood tutoring or local BPOs for initial experience'},
+  {icon:'🏥',n:'Healthcare Support',dur:'6-24 months',fee:'Low',desc:'Roles like ASHA, ANM assistant, nursing assistant; steady local demand.',job:'Health Worker, Nurse Assistant',requirements:'12th PCB preferred for some courses; compassion and basic literacy',howToStart:'Apply to district health training centres or nursing assistant courses; look for govt-sponsored seats',training:'State nursing courses, district health centres, NGOs',income:'₹8k-30k/month depending on role and location',contact:'District Health Office / local hospitals'},
+  {icon:'🛒',n:'Micro-Entrepreneurship (Kirana/Shop)',dur:'Ongoing',fee:'Varies',desc:'Small retail or service businesses serving the village — reliable daily demand.',job:'Shop owner, Service provider',requirements:'Small capital or access to microloan; basic bookkeeping',howToStart:'Start with a single product/service; use local market surveys; register under Udyam / take microloan',training:'Local MSME cell, NABARD, microfinance institutions',income:'₹5k-40k+/month depending on location and products',contact:'Local bank / MSME facilitation centre'}
+];
+const ukCenters = [
+  {name:'Government ITI Dehradun',city:'Dehradun',courses:'Electrician, Fitter, COPA, Solar Technician',notes:'State free seats, PMKVY training available'},
+  {name:'Government ITI Roorkee',city:'Roorkee',courses:'Electrician, Computer Operator, Engineering Trades',notes:'State-sponsored courses and apprenticeships'},
+  {name:'Government ITI Srinagar Garhwal',city:'Srinagar',courses:'Electrician, Welding, Fitter, Computer Operator',notes:'Free skill training for rural youth'},
+  {name:'Government ITI Almora',city:'Almora',courses:'Tailoring, Computer Operator, Electrical',notes:'PMKVY and state-funded courses available'},
+  {name:'Government ITI Pithoragarh',city:'Pithoragarh',courses:'Mechanical, Electrician, Sewing Technology',notes:'Free or low-cost training for local students'},
+  {name:'National Skill Training Institute (NSTI)',city:'Dehradun',courses:'Information Technology, Electronics, Food Processing',notes:'Ministry of Skill Development centre with scholarships'},
+  {name:'Krishi Vigyan Kendra (KVK)',city:'Multiple districts',courses:'Agri entrepreneurship, food processing, organic farming',notes:'Free training from State Agriculture Department'},
+  {name:'RSETI (Rural Self Employment Training Institute)',city:'Multiple districts',courses:'Self-employment coaching, small business training',notes:'Free rural entrepreneurship training and bank linkages'},
+  {name:'Government Polytechnic Dehradun',city:'Dehradun',courses:'Diploma in Engineering trades, Solar Technology',notes:'State scholarships and free seats for eligible students'}
+];
+
+document.getElementById('opportunitiesGrid').innerHTML=opportunities.map(o=>`
+  <div class="big-card">
+    <div class="bc-head"><div class="bc-icon" style="background:#FFF">${o.icon}</div><div><div class="bc-title">${o.n}</div><div class="bc-sub">${o.dur} • ${o.fee}</div></div></div>
+    <div class="bc-desc">${o.desc}</div>
+    <div style="margin-top:8px"><div style="font-size:13px;color:var(--text3)">💼 ${o.job}</div></div>
+    <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+      <button class="btn btn-o">Read more</button>
+    </div>
+  </div>
+`).join('');
+
+document.getElementById('uktCentersGrid').innerHTML = ukCenters.map(c=>`
+  <div class="big-card">
+    <div class="bc-head"><div class="bc-icon" style="background:#FFF">🏫</div><div><div class="bc-title">${c.name}</div><div class="bc-sub">${c.city}</div></div></div>
+    <div class="bc-desc">${c.courses}</div>
+    <div style="margin-top:8px"><div style="font-size:13px;color:var(--text3)">${c.notes}</div></div>
+  </div>
+`).join('');
+
+// Attach click handlers for opportunity read more buttons
+setTimeout(()=>{
+  const grid = document.getElementById('opportunitiesGrid');
+  if(!grid) return;
+  grid.querySelectorAll('.big-card').forEach((card,i)=>{
+    const btn = card.querySelector('.btn-o');
+    if(!btn) return;
+    btn.onclick = function(e){ e.stopPropagation(); openCourseModal(opportunities[i]); };
+  });
+},50);
+</script>
+</body>
+</html>
