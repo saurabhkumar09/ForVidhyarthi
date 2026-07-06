@@ -616,7 +616,6 @@ function go(page){
   document.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active'));
   const map={home:'Home',finder:'Career',courses:'Courses',examprep:'Exam',jobs:'Job',schemes:'Schemes',opportunities:'Opportunities'};
   document.querySelectorAll('.nav-link').forEach(b=>{if(b.textContent.includes(map[page]))b.classList.add('active');});
-  window.scrollTo(0,0);
 }
 function toggleMenu(){document.getElementById('mobNav').classList.toggle('open');}
 
@@ -795,7 +794,6 @@ function openCourseModal(course){
   // Update share button to open WA with concise message for this opportunity
   document.getElementById('modalWaBtn').onclick = function(e){ e.stopPropagation(); wa(course.n, (course.dur?course.dur+' | ':'') + (course.job?course.job:'')) };
   document.getElementById('courseModalOverlay').style.display='flex';
-  window.scrollTo(0,0);
 }
 function closeCourseModal(){ document.getElementById('courseModalOverlay').style.display='none'; }
 function modalShare(){ document.getElementById('modalWaBtn').click(); }
